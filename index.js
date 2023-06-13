@@ -1,7 +1,7 @@
 //Importamos los modulos necesarios
 const cors = require("cors");
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2/promise');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 
@@ -20,20 +20,16 @@ app.use(express.urlencoded({
 }));
 
 //Conectamos a la base de datos MySQL
-const connection = mysql.createConnection ({
-    host:'localhost',
-    user:'root',
-    password:'',
-    database:'typsa_web'
+async function main() {
+  const connection = await createConnection ({
+    user:'3di95sove1tfc3y7sxrx',
+    password:'pscale_pw_uT4qDvJG8hpA8vefTY4P1XJzC13Zsi7mMxkJpRzffWz',
+    database:'database-t'
 });
-/*var conn=mysql.createConnection({
-  host:"database-typsa.mysql.database.azure.com", 
-  user:"administrador", 
-  password:"4dmini$tr4d0R", 
-  database:"{your_database}", 
-  port:3306, 
-  ssl:{ca:fs.readFileSync("{ca-cert filename}")
-}});*/
+
+}
+
+
 
 // Configura el transporte de correo
 const transporter = nodemailer.createTransport({
