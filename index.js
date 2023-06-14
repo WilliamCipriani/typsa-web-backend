@@ -1,7 +1,7 @@
 //Importamos los modulos necesarios
 const cors = require("cors");
 const express = require('express');
-const mysql = require('mysql2/promise');
+const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 
@@ -19,15 +19,16 @@ app.use(express.urlencoded({
     extended:true,
 }));
 
+
 //Conectamos a la base de datos MySQL
-async function main() {
-  const connection = await createConnection ({
-    user:'3di95sove1tfc3y7sxrx',
-    password:'pscale_pw_uT4qDvJG8hpA8vefTY4P1XJzC13Zsi7mMxkJpRzffWz',
-    database:'database-t'
+const connection = mysql.createConnection ({
+  host:'bltyl1rqnp32kmqymmqo-mysql.services.clever-cloud.com',
+  user:'us5pcxjoehn0tbis',
+  password:'l7hybTMc4j2LN6NCs7ft',
+  database:'bltyl1rqnp32kmqymmqo'
 });
 
-}
+
 
 
 
@@ -49,7 +50,7 @@ connection.connect(function(err){
         return console.error('error : '+ err.message);
     }
 
-    console.log('Conectado a mysql');
+    console.log('Connected as id ' + connection.threadId);
     
 });
 
@@ -64,6 +65,11 @@ app.get('/usuarios', function (req, res) {
    } catch (error) {
         res.status(500).json({mensaje:' ERROR AL OBTENER LOS USUARIOS', error});
    }
+});
+
+// Ruta raíz
+app.get('/', function(req, res) {
+  res.send('¡La aplicación está funcionando correctamente!');
 });
 
 
