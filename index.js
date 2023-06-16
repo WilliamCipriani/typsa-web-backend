@@ -1,19 +1,13 @@
 //Importamos los modulos necesarios
-const cors = require("cors");
+//const cors = require("cors");
 const express = require('express');
-const mysql = require('mysql');
+//const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 
 //JSON
 const fs = require('fs');
 const path = require('path');
-
-const usuariosFilePath = path.join(__dirname, 'usuarios.json');
-const usuariosData = fs.readFileSync(usuariosFilePath);
-const usuarios = JSON.parse(usuariosData);;
-
-
 
 
 const port = process.env.PORT || 3030;
@@ -23,22 +17,27 @@ var app = express();
 
 //Configuramos el middleware para parsear JSON
 app.use(bodyParser.json());
-app.use(cors());
+//app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({
     extended:true,
 }));
 
 
+const usuariosFilePath = path.join(__dirname, 'usuarios.json');
+const usuariosData = fs.readFileSync(usuariosFilePath);
+const usuarios = JSON.parse(usuariosData);
+
+
 //Conectamos a la base de datos MySQL
-const connection = mysql.createConnection ({
+/*const connection = mysql.createConnection ({
   host:'localhost',
   user:'root',
   password:'',
   database:'typsa_web'
 });
 
-
+*/
 
 
 
@@ -55,7 +54,7 @@ const transporter = nodemailer.createTransport({
 
 
 //Definimos una funcion para ejecutar consultas SQL
-connection.connect(function(err){
+/*connection.connect(function(err){
     if(err){
         return console.error('error : '+ err.message);
     }
@@ -63,7 +62,7 @@ connection.connect(function(err){
     console.log('Connected as id ' + connection.threadId);
     
 });
-
+*/
 
 
 
