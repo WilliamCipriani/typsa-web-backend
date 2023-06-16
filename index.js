@@ -5,6 +5,16 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 
+//JSON
+const fs = require('fs');
+const path = require('path');
+
+const usuariosFilePath = path.join(__dirname, 'usuarios.json');
+const usuariosData = fs.readFileSync(usuariosFilePath);
+const usuarios = JSON.parse(usuariosData);;
+
+
+
 
 const port = process.env.PORT || 3030;
 
@@ -22,10 +32,10 @@ app.use(express.urlencoded({
 
 //Conectamos a la base de datos MySQL
 const connection = mysql.createConnection ({
-  host:'bltyl1rqnp32kmqymmqo-mysql.services.clever-cloud.com',
-  user:'us5pcxjoehn0tbis',
-  password:'l7hybTMc4j2LN6NCs7ft',
-  database:'bltyl1rqnp32kmqymmqo'
+  host:'localhost',
+  user:'root',
+  password:'',
+  database:'typsa_web'
 });
 
 
@@ -58,6 +68,7 @@ connection.connect(function(err){
 
 
 //Definimos una ruta para obtener todos los usuarios
+/*
 app.get('/usuarios', function (req, res) { 
    try {
         const usuarios =  connection.query('SELECT * FROM usuarios');
@@ -66,13 +77,27 @@ app.get('/usuarios', function (req, res) {
         res.status(500).json({mensaje:' ERROR AL OBTENER LOS USUARIOS', error});
    }
 });
+*/
+
+
+app.get('/usuarios', function (req, res) { 
+  try {
+    const usuariosData = fs.readFileSync(usuariosFilePath);
+    const usuarios = JSON.parse(usuariosData);
+    res.json(usuarios);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'ERROR AL OBTENER LOS USUARIOS', error });
+  }
+});
+
 
 // Ruta raíz
 app.get('/', function(req, res) {
   res.send('¡La aplicación está funcionando correctamente!');
 });
 
-
+/*
 
 app.post('/auth', function(req, res) {
 	
@@ -106,6 +131,24 @@ app.post('/auth', function(req, res) {
 		res.end();
 	}
 });
+*/
+
+// USA ELL USUARIOS.JSON PARA LEGEARSE
+app.post('/auth', function(req, res) {
+  const { username, password } = req.body;
+
+  if (username && password) {
+    const user = usuarios.find((user) => user.username === username && user.password === password);
+    if (user) {
+      res.json({ ok: true, msj: 'Inicio sesión', id: user.id });
+    } else {
+      res.json({ msj: 'Usuario y/o Contraseña Incorrecta' });
+    }
+  } else {
+    res.status(400).json({ msj: 'Por favor ingresa Usuario y Contraseña!' });
+  }
+});
+
 
 
 const sendEmail = async (data) => {
